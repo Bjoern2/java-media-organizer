@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<organizer>
+
+	<config>
+		<inputPath>c:/temp/photo/input</inputPath>
+		<errorPath>c:/temp/photo/error</errorPath>
+	</config>
+
+	<metaDataResolvers>
+		<bean class="com.github.bjoern2.photo.organizer.metadata.FileAttributesResolver" />
+		<bean class="com.github.bjoern2.photo.organizer.metadata.ImageSizeResolver" />
+		<bean class="com.github.bjoern2.photo.organizer.metadata.JpegResolver" />
+		<bean class="com.github.bjoern2.photo.organizer.metadata.ICalEventNameResolver">
+			<property name="path">c:/temp/profbulb@googlemail.com.ics</property>
+		</bean>
+	</metaDataResolvers>
+	
+	<targetFilenameResolvers>
+		<bean class="com.github.bjoern2.photo.organizer.filename.GenericTargetFilenameResolver" >
+			<property name="path">C:/temp/photo/{yyyy}/{eventname}/{basename}.{ext}</property>
+		</bean>
+		<bean class="com.github.bjoern2.photo.organizer.filename.GenericTargetFilenameResolver" >
+			<property name="path">C:/temp/photo/{yyyy}/{MM}/{basename}.{ext}</property>
+		</bean>
+	</targetFilenameResolvers>
+
+</organizer>

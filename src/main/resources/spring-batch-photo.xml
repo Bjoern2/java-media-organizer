@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+	http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	
+	<job id="photoJob" xmlns="http://www.springframework.org/schema/batch">
+		<step id="step1">
+			<tasklet>
+				<chunk reader="photoItemReader" writer="logItemWriter" processor="photoItemProcessor" commit-interval="1" />
+			</tasklet>
+		</step>
+	</job>
+
+
+	<bean id="photoItemProcessor" class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="delegates">
+			<list>
+				<bean class="com.github.bjoern2.photo.organizer.processor.FileAttributeProcessor" />
+				<bean class="com.github.bjoern2.photo.organizer.processor.JpegItemProcessor" />
+				<bean class="com.github.bjoern2.photo.organizer.processor.ImageSizeProcessor" />
+				<ref bean="eventnameItemProcessor" />
+				<ref bean="targetFilenameProcessor" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="eventnameItemProcessor" class="com.github.bjoern2.photo.organizer.processor.EventnameItemProcessor">
+		<property name="events">
+			<list>
+				<bean class="com.github.bjoern2.photo.organizer.processor.Event">
+					<property name="name" value="Sandras Geburtstag" />
+					<property name="start" value="2013-07-13 18:00:00" />
+					<property name="end" value="2013-07-13 23:59:59" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="targetFilenameProcessor" class="com.github.bjoern2.photo.organizer.processor.TargetFilenameProcessor">
+		<property name="basePath" value="C:\temp\photo\output" />
+	</bean>
+	
+	<bean id="photoItemReader" class="com.github.bjoern2.photo.organizer.reader.FileReader">
+		<property name="baseDir" value="C:\temp\photo\input" />
+		<property name="fileExtensions">
+			<list>
+				<value>jpg</value>
+				<value>jpeg</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="photoItemWriter" class="com.github.bjoern2.photo.organizer.writer.PhotoWriter">
+		<property name="overwrite" value="false" />
+	</bean>
+	
+	<bean id="logItemWriter" class="com.github.bjoern2.photo.organizer.writer.LogItemWriter" />
+	
+
+</beans>
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<events>
+	<event>
+		<name>Geburtstag Sandra 2013</name>
+		<start>2013-07-13 18:00:00</start>
+		<end>2013-07-14 03:00:00</end>
+	</event>
+	<event>
+		<name>London 2013</name>
+		<start>2013-10-04 10:00:00</start>
+		<end>2013-10-08 21:00:00</end>
+	</event>
+</events>
